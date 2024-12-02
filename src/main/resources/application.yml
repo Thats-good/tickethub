@@ -18,6 +18,9 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
 
+  kafka:
+    bootstrap-servers: ${KAFKA_CLUSTER_ADDRESS}
+
 kafka:
   createTicketMessageTopic: ${KAFKA_TOPIC_NAME}
 
