@@ -15,10 +15,24 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Ticket extends BaseEntity {
     @Id
+    @Column(name = "ticket_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long ticketId;
-    int performanceId;
-    LocalDateTime time;
-    int seatNumber;
-    String token;
+    private Long ticketId;
+
+    @ManyToOne
+    @JoinColumn(name = "performance_id", nullable = false)
+    private Performance performance;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Column(name = "time", nullable = false)
+    private LocalDateTime time;
+
+    @Column(name = "seat_number", nullable = false)
+    private int seatNumber;
+
+    @Column(name = "token")
+    private String token;
 }

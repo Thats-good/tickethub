@@ -6,26 +6,18 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
+@Table(name = "Performance")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class User extends BaseEntity {
+public class Performance extends BaseEntity {
     @Id
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "performance_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private long performanceId;
 
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "identifier", nullable = false)
-    private String identifier;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "jwt_token")
-    private String jwtToken;
 }
