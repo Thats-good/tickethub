@@ -34,6 +34,8 @@ dependencies {
 
 	// kafka
 	implementation 'org.apache.kafka:kafka-clients:3.4.0'
+
+	//mysql driver
 	implementation 'mysql:mysql-connector-java:8.0.30'
 
 //	runtimeOnly 'com.mysql:mysql-connector-j'
