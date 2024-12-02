@@ -38,7 +38,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     @Transactional
-    public ProduceTicketResponse createTicket(long userId, int performanceId, LocalDateTime time, int seatNumber) {
+    public ProduceTicketResponse createTicket(long userId, int performanceId, LocalDateTime time, int seatNumber, String payment) {
         String userIdString = Long.toString(userId);
         String performanceIdString = Integer.toString(performanceId);
         String timeString = time.toString();
@@ -46,7 +46,7 @@ public class TicketServiceImpl implements TicketService {
 
         try{
             kafkaProducer.beginTransaction();
-            ProducerRecord<String, String> producerRecord = transformMessageStringToJson(userIdString, performanceIdString, timeString, seatNumberString);
+            ProducerRecord<String, String> producerRecord = transformMessageStringToJson(userIdString, performanceIdString, timeString, seatNumberString, payment);
             Future<RecordMetadata> sendFuture = kafkaProducer.send(producerRecord);
 
             // 메시지 전송 완료 까지 대기 (Timeout 1sec)
@@ -122,7 +122,7 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
-    private ProducerRecord<String, String> transformMessageStringToJson(String userId, String performanceId, String time, String seatNumber) {
+    private ProducerRecord<String, String> transformMessageStringToJson(String userId, String performanceId, String time, String seatNumber, String payment) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         // 데이터를 담을 Map 생성
@@ -131,6 +131,7 @@ public class TicketServiceImpl implements TicketService {
         messageMap.put("performanceId", performanceId);
         messageMap.put("time", time);
         messageMap.put("seatNumber", seatNumber);
+        messageMap.put("payment", payment);
 
         try {
             // Map을 JSON 문자열로 변환

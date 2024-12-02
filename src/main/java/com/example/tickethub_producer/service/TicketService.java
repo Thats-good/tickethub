@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TicketService {
 
-    ProduceTicketResponse createTicket(long userId, int performanceId, LocalDateTime time, int seatNumber);
+    ProduceTicketResponse createTicket(long userId, int performanceId, LocalDateTime time, int seatNumber, String payment);
 
     Long saveTicket();
 
