@@ -28,7 +28,7 @@ public class TicketServiceImpl implements TicketService {
 
     private final KafkaProducer<String, String> kafkaProducer;
 
-    @Value("${kafka.reservationMessageTopic}")
+    @Value("${kafka.createTicketMessageTopic}")
     private String createTicketMessageTopic;
 
     @PostConstruct

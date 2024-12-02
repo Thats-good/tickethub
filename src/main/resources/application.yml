@@ -19,6 +19,6 @@ spring:
         default_batch_fetch_size: 100
 
 kafka:
-  reservationMessageTopic: ${KAFKA_TOPIC_NAME}
+  createTicketMessageTopic: ${KAFKA_TOPIC_NAME}
 
 
