@@ -1,5 +1,6 @@
 package com.example.tickethub_producer.entity;
 
+import com.example.tickethub_producer.entity.base.BaseEntity;
 import com.example.tickethub_producer.entity.enums.Tag;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Seat {
+public class Seat extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long seatId;
