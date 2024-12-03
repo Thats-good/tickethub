@@ -1,6 +1,7 @@
 package com.example.tickethub_producer.entity;
 
 import com.example.tickethub_producer.entity.base.BaseEntity;
+import com.example.tickethub_producer.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,6 +26,12 @@ public class User extends BaseEntity {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "role", nullable = false)
+    private Role role;
 
     @Column(name = "jwt_token")
     private String jwtToken;
