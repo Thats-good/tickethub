@@ -4,9 +4,7 @@ import java.time.LocalDateTime;
 
 public interface ProxyService {
 
-    long createTicket(int performanceId, LocalDateTime time, int seatNumber, String paymentStrategy, String jwtToken);
-
-    long createUserTicket(String userId, String jwtToken);
+    long createTicket(long userId, long performanceId, LocalDateTime time, int seatNumber, String payment, String jwtToken);
 
     boolean checkTicket(long ticketId, String jwtToken);
 

@@ -4,10 +4,13 @@ import com.example.tickethub_producer.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findUserByUserIdAndPassword(Long id, String pw);
-
-    boolean existsUserByUserIdAndPassword(Long id, String pw);
+    Optional<User> findUserByIdentifierAndPassword(String id, String pw);
+    
+    Optional<User> findByEmail(String email);
+    boolean existsUserByIdentifierOrEmail(String identifier, String email   );
 }

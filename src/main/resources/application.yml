@@ -3,9 +3,9 @@ spring:
     name: "tickethub-producer"
 
   datasource:
-    url: ${DATASOURCE_URL_LOCAL}
-    username: ${DATASOURCE_USERNAME}
-    password: ${DATASOURCE_PASSWORD}
+    url: ${DATASOURCE_URL_LOCAL:jdbc:mysql://localhost:3306/tickethub}
+    username: ${DATASOURCE_USERNAME:root}
+    password: ${DATASOURCE_PASSWORD:1}
   jpa:
     open-in-view: true
     hibernate:
@@ -18,10 +18,17 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
 
-  kafka:
-    bootstrap-servers: ${KAFKA_CLUSTER_ADDRESS}
 
-kafka:
-  createTicketMessageTopic: ${KAFKA_TOPIC_NAME}
+#
+#  kafka:
+#    bootstrap-servers: ${KAFKA_CLUSTER_ADDRESS:localhost:9096}
+#
+#
+#
+#kafka:
+#  createTicketMessageTopic: ${KAFKA_TOPIC_NAME:name}
 
-
+jwt:
+  header: Authorization
+  secret: 3c0a5b7c6e2ab239c25e2fb4a3325be96b75e7275bcb7277594f998acf47fd75
+  token-validity-in-seconds: 86400

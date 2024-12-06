@@ -1,14 +1,33 @@
 package com.example.tickethub_producer.service;
 
+import com.example.tickethub_producer.dto.ProduceTicketResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
-public interface TicketSystem {
 
-    long createTicket(int performanceId, LocalDateTime time, int seatNumber, String paymentStrategy);
+@Service
+@RequiredArgsConstructor
+public class TicketSystem implements ProxyService {
 
-    long createUserTicket(String userId);
+//    private final TicketService ticketService;
 
-    boolean checkTicket(long ticketId);
+    @Override
+    public long createTicket(long userId, long performanceId, LocalDateTime time, int seatNumber, String payment, String jwtToken) {
+//        ProduceTicketResponse ticket = ticketService.createTicket(userId, performanceId, time, seatNumber, payment);
+        return 0;
+    }
 
-    boolean checkToken(long ticketId, String token);
+    @Override
+    public boolean checkTicket(long ticketId, String jwtToken) {
+//        ticketService.checkTicket(ticketId);
+        return false;
+    }
+
+    @Override
+    public boolean checkToken(long ticketId, String token, String jwtToken) {
+//        ticketService.checkToken(ticketId, token);
+        return false;
+    }
 }
