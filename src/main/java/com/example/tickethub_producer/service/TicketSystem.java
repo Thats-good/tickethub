@@ -28,7 +28,7 @@ import java.util.concurrent.TimeoutException;
 
 @Service
 @RequiredArgsConstructor
-public class TicketSystem implements TicketService {
+public class TicketSystem implements ProxyService {
 
     //private final TicketService ticketService;
     private final UserRepository userRepository;
@@ -47,7 +47,7 @@ public class TicketSystem implements TicketService {
 
     @Override
     @Transactional
-    public ProduceTicketResponse createTicket(long userId, long performanceId, LocalDateTime time, int seatNumber, String payment) {
+    public ProduceTicketResponse createTicket(long userId, long performanceId, LocalDateTime time, int seatNumber, String payment, String token) {
         String userIdString = Long.toString(userId);
         String performanceIdString = Long.toString(performanceId);
         String timeString = time.toString();
@@ -81,13 +81,13 @@ public class TicketSystem implements TicketService {
     }
 
     @Override
-    public List<Ticket> checkUserTicket(long userId) {
+    public List<Ticket> checkUserTicket(long userId, String token) {
         User user = userRepository.findById(userId).get();
         return ticketRepository.findAllByUser(user);
     }
 
     @Override
-    public String checkTicket(long ticketId) {
+    public String checkTicket(long ticketId, String token) {
         Ticket ticket = ticketRepository.findById(ticketId).get();
         String ticketToken = jwtProvider.createTicketToken(ticket);
         ticket.setToken(ticketToken);
@@ -96,7 +96,7 @@ public class TicketSystem implements TicketService {
     }
 
     @Override
-    public boolean checkToken(long ticketId, String token) {
+    public boolean checkToken(long ticketId, String token, String jwtToken) {
         Ticket ticket = ticketRepository.findById(ticketId).get();
         return ticket.getToken().equals(token) && jwtProvider.isExpiredToken(token);
     }
