@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CreateUserTicketRequestDto {
+public class CheckUserTicketRequestDto {
     private long userId;
     private String jwtToken;
 }

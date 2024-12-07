@@ -19,7 +19,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     ResponseEntity<ResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
         return ResponseEntity
                 .status(HttpStatus.OK)

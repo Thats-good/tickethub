@@ -38,4 +38,5 @@ secret:
   jwt-expired-in:
     access-token: ${JWT_EXPIRED_IN}
     refresh-token: ${REFRESH_TOKEN_EXPIRED_IN}
+    ticket-token: ${TOKEN_EXPIRED_IN}
 

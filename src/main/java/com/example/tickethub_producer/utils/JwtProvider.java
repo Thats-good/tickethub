@@ -1,6 +1,7 @@
 package com.example.tickethub_producer.utils;
 
 import com.example.tickethub_producer.entity.RedisEntity;
+import com.example.tickethub_producer.entity.Ticket;
 import com.example.tickethub_producer.entity.enums.Role;
 import com.example.tickethub_producer.repository.RedisRepository;
 import com.example.tickethub_producer.service.AuthTokens;
@@ -20,11 +21,29 @@ public class JwtProvider {
     private String JWT_SECRET_KEY;
 
     @Value("${secret.jwt-expired-in.access-token}")
-    public static long JWT_EXPIRED_IN;
+    public long JWT_EXPIRED_IN;
 
     @Value("${secret.jwt-expired-in.refresh-token}")
     @Getter
     private long REFRESH_TOKEN_EXPIRED_IN;
+
+    @Value("${secret.jwt-expired-in.ticket-token}")
+    private long TOKEN_EXPIRED_IN;
+
+    public String createTicketToken(Ticket ticket) {
+        Claims claims = Jwts.claims().setSubject(String.valueOf(ticket.getSeatNumber()));
+        Date now = new Date();
+        Date ticketTokenExpiredAt = new Date(now.getTime() + TOKEN_EXPIRED_IN);
+
+        String ticketToken = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(ticketTokenExpiredAt)
+                .claim("performance", ticket.getPerformance().getName())
+                .signWith(SignatureAlgorithm.HS256, JWT_SECRET_KEY)
+                .compact();
+        return ticketToken;
+    }
 
     public AuthTokens createToken(String email, Long userId, Role role) {
         log.info("JWT key={}", JWT_SECRET_KEY);
@@ -59,7 +78,7 @@ public class JwtProvider {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(JWT_SECRET_KEY).build()
                     .parseClaimsJws(token);
-            return claims.getBody().getExpiration().before(new Date());
+            return claims.getBody().getExpiration().after(new Date());
 
         } catch (ExpiredJwtException e) {
             return true;
