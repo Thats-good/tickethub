@@ -24,14 +24,14 @@ spring:
       port: 6379
 
 
-#
-#  kafka:
-#    bootstrap-servers: ${KAFKA_CLUSTER_ADDRESS:localhost:9096}
-#
-#
-#
-#kafka:
-#  createTicketMessageTopic: ${KAFKA_TOPIC_NAME:name}
+
+  kafka:
+    bootstrap-servers: ${KAFKA_CLUSTER_ADDRESS:localhost:9096}
+
+
+
+kafka:
+  createTicketMessageTopic: ${KAFKA_TOPIC_NAME:name}
 
 secret:
   jwt-secret-key: ${JWT_SECRET_KEY}

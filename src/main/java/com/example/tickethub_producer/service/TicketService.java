@@ -10,10 +10,10 @@ public interface TicketService {
 
     ProduceTicketResponse createTicket(long userId, long performanceId, LocalDateTime time, int seatNumber, String payment);
 
-    Long saveTicket();
+    List<Ticket> checkUserTicket(long userId);
 
-//    Ticket checkTicket(Long ticketId);
+    String checkTicket(long ticketId);
 
-    boolean checkToken(Long ticketId, String token);
+    boolean checkToken(long ticketId, String token);
 
 }
