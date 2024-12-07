@@ -9,14 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Member;
-
 import static com.example.tickethub_producer.constants.Constants.STATUS_200;
 import static com.example.tickethub_producer.constants.Constants.STATUS_201;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/user")
 public class UserController {
 
     private final UserService userService;
@@ -29,8 +27,8 @@ public class UserController {
                 .body(new ResponseDto(STATUS_200, "login success."));
     }
 
-    @PostMapping("/sign-up")
-    ResponseEntity<ResponseDto> signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
+    @PostMapping("/signUp")
+    public ResponseEntity<ResponseDto> signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
         userService.signUp(signUpRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

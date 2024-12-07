@@ -2,7 +2,6 @@ package com.example.tickethub_producer.service;
 
 import com.example.tickethub_producer.dto.request.user.LoginRequestDto;
 import com.example.tickethub_producer.dto.request.user.SignUpRequestDto;
-import com.example.tickethub_producer.dto.response.ResponseDto;
 import com.example.tickethub_producer.entity.RefreshToken;
 import com.example.tickethub_producer.entity.TokenRequestDto;
 import com.example.tickethub_producer.entity.User;
@@ -14,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
