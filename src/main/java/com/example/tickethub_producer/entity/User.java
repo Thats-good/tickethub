@@ -1,5 +1,6 @@
 package com.example.tickethub_producer.entity;
 
+import com.example.tickethub_producer.dto.request.user.SignUpRequestDto;
 import com.example.tickethub_producer.entity.base.BaseEntity;
 import com.example.tickethub_producer.entity.enums.Role;
 import jakarta.persistence.*;
@@ -37,7 +38,13 @@ public class User extends BaseEntity {
     @Column(name = "jwt_token")
     private String jwtToken;
 
-    public void encodePassword(String encodedPassword){
-        this.password = encodedPassword;
+    public static User from(SignUpRequestDto signUpRequestDto) {
+        return User.builder()
+                .name(signUpRequestDto.getName())
+                .identifier(signUpRequestDto.getId())
+                .password(signUpRequestDto.getPw())
+                .email(signUpRequestDto.getEmail())
+                .role(Role.NORMAL)
+                .build();
     }
 }
