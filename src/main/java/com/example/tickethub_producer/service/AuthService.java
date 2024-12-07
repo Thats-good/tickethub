@@ -2,8 +2,10 @@ package com.example.tickethub_producer.service;
 
 import com.example.tickethub_producer.dto.request.user.LoginRequestDto;
 import com.example.tickethub_producer.dto.request.user.SignUpRequestDto;
+import com.example.tickethub_producer.entity.RedisEntity;
 import com.example.tickethub_producer.entity.TokenRequestDto;
 import com.example.tickethub_producer.entity.User;
+import com.example.tickethub_producer.repository.RedisRepository;
 import com.example.tickethub_producer.repository.RefreshTokenRepository;
 import com.example.tickethub_producer.repository.UserRepository;
 import com.example.tickethub_producer.utils.JwtProvider;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService implements UserService{
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisRepository redisRepository;
     private final JwtProvider jwtProvider;
 
     @Transactional
@@ -36,7 +39,10 @@ public class AuthService implements UserService{
         User user = userRepository.findUserByIdentifierAndPassword(loginRequestDto.getId(), loginRequestDto.getPw())
                 .orElseThrow(RuntimeException::new);
 
-        return jwtProvider.createToken(user.getEmail(), user.getUserId());
+        AuthTokens token = jwtProvider.createToken(user.getEmail(), user.getUserId(), user.getRole());
+        RedisEntity redisEntity = new RedisEntity(user.getEmail(), token.getAccessToken());
+        redisRepository.save(redisEntity);
+        return token;
     }
 
 

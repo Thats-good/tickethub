@@ -4,13 +4,11 @@ import com.example.tickethub_producer.dto.request.ticket.CreateTicketRequestDto;
 import com.example.tickethub_producer.dto.request.ticket.CreateUserTicketRequestDto;
 import com.example.tickethub_producer.dto.response.ResponseDto;
 import com.example.tickethub_producer.service.ProxyService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static com.example.tickethub_producer.constants.Constants.STATUS_200;

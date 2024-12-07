@@ -1,5 +1,8 @@
 package com.example.tickethub_producer.utils;
 
+import com.example.tickethub_producer.entity.RedisEntity;
+import com.example.tickethub_producer.entity.enums.Role;
+import com.example.tickethub_producer.repository.RedisRepository;
 import com.example.tickethub_producer.service.AuthTokens;
 import io.jsonwebtoken.*;
 import lombok.Getter;
@@ -17,13 +20,13 @@ public class JwtProvider {
     private String JWT_SECRET_KEY;
 
     @Value("${secret.jwt-expired-in.access-token}")
-    private long JWT_EXPIRED_IN;
+    public static long JWT_EXPIRED_IN;
 
     @Value("${secret.jwt-expired-in.refresh-token}")
     @Getter
     private long REFRESH_TOKEN_EXPIRED_IN;
 
-    public AuthTokens createToken(String email, Long userId) {
+    public AuthTokens createToken(String email, Long userId, Role role) {
         log.info("JWT key={}", JWT_SECRET_KEY);
 
         Claims claims = Jwts.claims().setSubject(email);
@@ -36,6 +39,7 @@ public class JwtProvider {
                 .setIssuedAt(now)
                 .setExpiration(accessTokenExpiredAt)
                 .claim("userId", userId)
+                .claim("role", role)
                 .signWith(SignatureAlgorithm.HS256, JWT_SECRET_KEY)
                 .compact();
 
