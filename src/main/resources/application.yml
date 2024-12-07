@@ -28,7 +28,9 @@ spring:
 #kafka:
 #  createTicketMessageTopic: ${KAFKA_TOPIC_NAME:name}
 
-jwt:
-  header: Authorization
-  secret: 3c0a5b7c6e2ab239c25e2fb4a3325be96b75e7275bcb7277594f998acf47fd75
-  token-validity-in-seconds: 86400
+secret:
+  jwt-secret-key: ${JWT_SECRET_KEY}
+  jwt-expired-in:
+    access-token: ${JWT_EXPIRED_IN}
+    refresh-token: ${REFRESH_TOKEN_EXPIRED_IN}
+

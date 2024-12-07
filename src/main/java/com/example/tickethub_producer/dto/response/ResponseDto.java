@@ -10,4 +10,6 @@ public class ResponseDto {
     private String statusCode;
 
     private String statusMessage;
+
+    private Object data;
 }

@@ -2,11 +2,11 @@ package com.example.tickethub_producer.service;
 
 import com.example.tickethub_producer.dto.request.user.LoginRequestDto;
 import com.example.tickethub_producer.dto.request.user.SignUpRequestDto;
-import com.example.tickethub_producer.entity.RefreshToken;
 import com.example.tickethub_producer.entity.TokenRequestDto;
 import com.example.tickethub_producer.entity.User;
 import com.example.tickethub_producer.repository.RefreshTokenRepository;
 import com.example.tickethub_producer.repository.UserRepository;
+import com.example.tickethub_producer.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService implements UserService{
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final JwtProvider jwtProvider;
 
     @Transactional
     public long signUp(SignUpRequestDto signUpRequestDto) {
@@ -32,7 +33,10 @@ public class AuthService implements UserService{
     @Transactional
     public AuthTokens login(LoginRequestDto loginRequestDto) {
 
-        return null;
+        User user = userRepository.findUserByIdentifierAndPassword(loginRequestDto.getId(), loginRequestDto.getPw())
+                .orElseThrow(RuntimeException::new);
+
+        return jwtProvider.createToken(user.getEmail(), user.getUserId());
     }
 
 

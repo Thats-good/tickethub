@@ -21,10 +21,9 @@ public class UserController {
 
     @GetMapping("/login")
     ResponseEntity<ResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
-        userService.login(loginRequestDto);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDto(STATUS_200, "login success."));
+                .body(new ResponseDto(STATUS_200, "login success.", userService.login(loginRequestDto)));
     }
 
     @PostMapping("/signUp")
@@ -32,7 +31,7 @@ public class UserController {
         userService.signUp(signUpRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new ResponseDto(STATUS_201, "sign-up success."));
+                .body(new ResponseDto(STATUS_201, "sign-up success.", null));
     }
 
 }

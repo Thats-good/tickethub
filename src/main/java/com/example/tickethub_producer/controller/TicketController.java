@@ -33,7 +33,7 @@ public class TicketController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDto(STATUS_201, "Ticket created success."));
+                .body(new ResponseDto(STATUS_201, "Ticket created success.", null));
     }
 
     @PostMapping("/ok")
@@ -43,7 +43,7 @@ public class TicketController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDto(STATUS_201, "UserTicket created success."));
+                .body(new ResponseDto(STATUS_201, "UserTicket created success.", null));
     }
 
     @GetMapping("/2")
@@ -51,7 +51,7 @@ public class TicketController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDto(STATUS_200, "Check ticket success."));
+                .body(new ResponseDto(STATUS_200, "Check ticket success.", null));
     }
 
     @GetMapping("/3")
@@ -59,6 +59,6 @@ public class TicketController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDto(STATUS_200, "Check Token success."));
+                .body(new ResponseDto(STATUS_200, "Check Token success.", null));
     }
 }
