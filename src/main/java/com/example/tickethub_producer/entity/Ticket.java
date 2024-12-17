@@ -34,5 +34,6 @@ public class Ticket extends BaseEntity {
     private int seatNumber;
 
     @Column(name = "token")
+    @Setter
     private String token;
 }

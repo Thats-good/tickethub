@@ -8,14 +8,12 @@ import java.util.List;
 
 public interface TicketService {
 
-    ProduceTicketResponse createTicket(long userId, int performanceId, LocalDateTime time, int seatNumber, String payment);
+    ProduceTicketResponse createTicket(long userId, long performanceId, LocalDateTime time, int seatNumber, String payment);
 
-    Long saveTicket();
+    List<Ticket> checkUserTicket(long userId);
 
-    List<Ticket> checkUserTicket(Long userId);
+    String checkTicket(long ticketId);
 
-    Ticket checkTicket(Long ticketId);
-
-    boolean checkToken(Long ticketId, String token);
+    boolean checkToken(long ticketId, String token);
 
 }
