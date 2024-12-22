@@ -27,4 +27,9 @@ public class ViewController {
     String myPage(){
         return "myPage";
     }
+
+    @GetMapping("/checkTicket")
+    String check(){
+        return "checkTicket";
+    }
 }

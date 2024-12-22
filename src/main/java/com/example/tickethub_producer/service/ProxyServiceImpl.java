@@ -3,6 +3,7 @@ package com.example.tickethub_producer.service;
 import com.example.tickethub_producer.dto.ProduceTicketResponse;
 import com.example.tickethub_producer.entity.PerformanceTicket;
 import com.example.tickethub_producer.entity.Ticket;
+import com.example.tickethub_producer.entity.enums.Role;
 import com.example.tickethub_producer.repository.RedisRepository;
 import com.example.tickethub_producer.repository.UserRepository;
 import com.example.tickethub_producer.utils.JwtProvider;
@@ -54,7 +55,11 @@ public class ProxyServiceImpl implements ProxyService {
     @Override
     public boolean checkToken(long ticketId, String token, String jwtToken) {
         if(checkAuthority(jwtToken)){
-            return ticketSystem.checkToken(ticketId, token, jwtToken);
+            if(checkResister(jwtToken)){
+                return ticketSystem.checkToken(ticketId, token, jwtToken);
+            }else{
+                throw new RuntimeException("권한이 부족합니다.");
+            }
         }else{
             throw new RuntimeException("로그인 해주세요");
         }
@@ -63,5 +68,10 @@ public class ProxyServiceImpl implements ProxyService {
     public boolean checkAuthority(String accessToken){
         String email = validate.getEmail(accessToken);
         return (Objects.equals(accessToken, redisRepository.findById(email).get().getAccessToken())) && validate.isExpiredToken(accessToken);
+    }
+
+    public boolean checkResister(String accessToken){
+        Role role = validate.getRole(accessToken);
+        return role==Role.RESISTER;
     }
 }

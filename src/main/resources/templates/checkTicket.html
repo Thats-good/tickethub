@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="/fragments/header.html::header"></div>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div th:replace="/fragments/nav.html::nav"></div>
+
+<header>
+    <h1>Check ticket</h1>
+</header>
+<div class="container">
+    <h2>login</h2>
+    <form id="checkForm">
+        <div class="form-group">
+            <label for="ticketId">ticketId:</label>
+            <input type="text" class="form-control" id="ticketId" placeholder="Enter ticketId" name="ticketId">
+        </div>
+        <div class="form-group">
+            <label for="check">ticketToken:</label>
+            <input type="text" class="form-control" id="check" placeholder="Enter ticketToken" name="ticketToken">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<script th:src="@{/js/check.js}" defer></script>
+<footer th:replace="/fragments/footer.html::footer"></footer>
+
+</body>
+</html>

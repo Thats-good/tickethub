@@ -58,7 +58,7 @@ public class JwtProvider {
                 .setIssuedAt(now)
                 .setExpiration(accessTokenExpiredAt)
                 .claim("userId", userId)
-                .claim("role", role)
+                .claim("role", role.name())
                 .signWith(SignatureAlgorithm.HS256, JWT_SECRET_KEY)
                 .compact();
 
@@ -104,10 +104,35 @@ public class JwtProvider {
     }
 
     public long getId(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(JWT_SECRET_KEY).build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("userId", Long.class);
+        Claims claims = decodeToken(token);
+        return claims.get("userId", Long.class);
+    }
+
+    public Role getRole(String token) {
+        Claims claims = decodeToken(token);
+
+        String roleStr = claims.get("role", String.class);
+        try {
+            return Role.valueOf(roleStr);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid role in token: " + roleStr);
+        }
+    }
+
+    public Claims decodeToken(String token) {
+        try {
+            // 토큰 디코딩 및 검증
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(JWT_SECRET_KEY)
+                    .build()
+                    .parseClaimsJws(token);
+
+            // 페이로드 반환
+            return claimsJws.getBody();
+        } catch (SignatureException e) {
+            throw new RuntimeException("Invalid JWT signature");
+        } catch (Exception e) {
+            throw new RuntimeException("Error decoding JWT", e);
+        }
     }
 }
