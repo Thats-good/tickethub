@@ -65,14 +65,68 @@ document.getElementById("payment-method").addEventListener("change", (event) => 
 });
 
 // 결제 처리
-document.getElementById("payment-form").addEventListener("submit", (event) => {
-    event.preventDefault();
+document.getElementById("payment-form").addEventListener("submit", async (event) => {
+    event.preventDefault(); // 기본 폼 제출 동작 중단
 
     const selectedMethod = document.getElementById("payment-method").value;
     const eventName = sessionStorage.getItem("selectedEvent");
     const seats = JSON.parse(sessionStorage.getItem("selectedSeats"));
+    const accessToken = localStorage.getItem('accessToken');
 
-    alert(`Payment successful for ${eventName} using ${selectedMethod}. Seats: ${seats.join(", ")}`);
-    sessionStorage.clear();
-    window.location.reload(); // 초기화
+    if(accessToken==null){
+        alert("login first")
+        window.location.href = "/view/login";
+    }
+    // 결제 정보 가져오기
+    let paymentDetails;
+    if (selectedMethod === "CARD") {
+        paymentDetails = {
+            cardName: document.getElementById("card-name").value,
+            cardNumber: document.getElementById("card-number").value,
+            expiry: document.getElementById("expiry").value,
+            cvv: document.getElementById("cvv").value,
+        };
+    } else if (selectedMethod === "KAKAO_PAY") {
+        paymentDetails = {
+            quickId: document.getElementById("quick-id").value,
+        };
+    } else if (selectedMethod === "CASH") {
+        paymentDetails = {
+            bankName: document.getElementById("bank-name").value,
+            accountNumber: document.getElementById("account-number").value,
+        };
+    }
+
+    // 서버로 보낼 데이터
+    const payload = {
+        performanceId: eventName,
+        seatNumber: seats,
+        payment: selectedMethod,
+        jwtToken: accessToken,
+    };
+
+    try {
+        // 서버로 데이터 전송
+        const response = await fetch("/ticket/create", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            throw new Error("Payment failed. Please try again.");
+        }
+
+        const result = await response.json();
+        alert(`Payment successful for ${eventName} using ${selectedMethod}. Seats: ${seats.join(", ")}`);
+
+        // 세션 초기화 및 페이지 새로고침
+        sessionStorage.clear();
+        window.location.reload();
+    } catch (error) {
+        console.error("Error submitting payment:", error);
+        alert("An error occurred while processing the payment. Please try again.");
+    }
 });

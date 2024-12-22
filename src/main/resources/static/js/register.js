@@ -9,7 +9,7 @@ document.getElementById("signupForm").addEventListener("submit", async (event) =
 
     try {
         // RESTful API로 회원가입 요청 보내기
-        const response = await fetch("/user/signup", {
+        const response = await fetch("/user/signUp", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

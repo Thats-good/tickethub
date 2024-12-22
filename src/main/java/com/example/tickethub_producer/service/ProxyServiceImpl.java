@@ -25,7 +25,7 @@ public class ProxyServiceImpl implements ProxyService {
     private final JwtProvider validate;
 
     @Override
-    public ProduceTicketResponse createTicket(long performanceId, LocalDateTime time, int seatNumber, String payment, String jwtToken) {
+    public ProduceTicketResponse createTicket(long performanceId, LocalDateTime time, int[] seatNumber, String payment, String jwtToken) {
         if(checkAuthority(jwtToken)){
             return ticketSystem.createTicket(performanceId, time, seatNumber, payment, jwtToken);
         }else{

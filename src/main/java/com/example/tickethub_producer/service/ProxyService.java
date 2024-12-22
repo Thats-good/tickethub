@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ProxyService {
 
-    ProduceTicketResponse createTicket(long performanceId, LocalDateTime time, int seatNumber, String payment, String jwtToken);
+    ProduceTicketResponse createTicket(long performanceId, LocalDateTime time, int[] seatNumber, String payment, String jwtToken);
 
     List<PerformanceTicket> checkUserTicket(String jwtToken);
 

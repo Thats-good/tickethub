@@ -22,4 +22,9 @@ public class ViewController {
     String register(){
         return "register";
     }
+
+    @GetMapping("/myPage")
+    String myPage(){
+        return "myPage";
+    }
 }

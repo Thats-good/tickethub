@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CreateTicketRequestDto {
     private long performanceId;
-    private int seatNumber;
+    private int[] seatNumber;
     private String payment;
     private String jwtToken;
 }

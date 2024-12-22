@@ -34,25 +34,27 @@ public class TicketSystem implements ProxyService {
 
     @Override
     @Transactional(transactionManager = "kafkaTransactionManager")
-    public ProduceTicketResponse createTicket(long performanceId, LocalDateTime time, int seatNumber, String payment, String token) {
+    public ProduceTicketResponse createTicket(long performanceId, LocalDateTime time, int[] seatNumber, String payment, String token) {
         String userIdString = Long.toString(jwtProvider.getId(token));
         String performanceIdString = Long.toString(performanceId);
         String timeString = time.toString();
 
-        String seatNumberString = Integer.toString(seatNumber);
+        for(int i=0; i<seatNumber.length; i++){
+            String seatNumberString = Integer.toString(seatNumber[i]);
 
-        try {
-            kafkaTemplate.executeInTransaction(operations -> {
-                ProducerRecord<String, String> producerRecord = transformMessageStringToJson(
-                        userIdString, performanceIdString, timeString, seatNumberString, payment);
-                operations.send(producerRecord);
-                return null; // 트랜잭션 성공 시 반환값 없음
-            });
+            try {
+                kafkaTemplate.executeInTransaction(operations -> {
+                    ProducerRecord<String, String> producerRecord = transformMessageStringToJson(
+                            userIdString, performanceIdString, timeString, seatNumberString, payment);
+                    operations.send(producerRecord);
+                    return null; // 트랜잭션 성공 시 반환값 없음
+                });
 
-            return new ProduceTicketResponse("티켓 발급 요청이 정상적으로 처리되었습니다.");
-        } catch (Exception e) {
-            throw new RuntimeException("Kafka 트랜잭션 중 오류가 발생했습니다.", e);
+            } catch (Exception e) {
+                throw new RuntimeException("Kafka 트랜잭션 중 오류가 발생했습니다.", e);
+            }
         }
+        return new ProduceTicketResponse("티켓 발급 요청이 정상적으로 처리되었습니다.");
     }
 
     @Override

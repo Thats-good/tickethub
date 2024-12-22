@@ -16,18 +16,21 @@
     <section id="events-section">
         <h2>Select a Performance</h2>
         <div id="event-cards">
-            <div class="card" data-event="concert" data-price="50">
-                <h3>Concert</h3>
+            <div class="card" data-event="1" data-price="50">
+                <img src="/" alt="concert1" class="card-image">
+                <h3>Concert1</h3>
                 <p>Price: $50</p>
                 <button class="select-event">Select</button>
             </div>
-            <div class="card" data-event="theater" data-price="40">
-                <h3>Theater</h3>
+            <div class="card" data-event="2" data-price="40">
+                <img src="" alt="concert2" class="card-image">
+                <h3>Concert2</h3>
                 <p>Price: $40</p>
                 <button class="select-event">Select</button>
             </div>
-            <div class="card" data-event="sports" data-price="30">
-                <h3>Sports</h3>
+            <div class="card" data-event="3" data-price="30">
+                <img src="/" alt="concert3" class="card-image">
+                <h3>Concert3</h3>
                 <p>Price: $30</p>
                 <button class="select-event">Select</button>
             </div>
@@ -48,14 +51,14 @@
         <h2>Payment Information</h2>
         <label for="payment-method">Select Payment Method:</label>
         <select id="payment-method">
-            <option value="card">Card Payment</option>
-            <option value="quick">Quick Payment</option>
-            <option value="transfer">Bank Transfer</option>
+            <option value="CARD">Card Payment</option>
+            <option value="KAKAO_PAY">Kakao Pay</option>
+            <option value="CASH">Bank Transfer</option>
         </select>
 
-        <form id="payment-form">
+        <form id="payment-form" novalidate>
             <!-- 카드 결제 폼 -->
-            <div id="card-payment" class="payment-method-form">
+            <div id="CARD-payment" class="payment-method-form">
                 <label for="card-name">Name on Card:</label>
                 <input type="text" id="card-name" name="card-name" required>
 
@@ -69,14 +72,14 @@
                 <input type="text" id="cvv" name="cvv" required>
             </div>
 
-            <!-- 간편 결제 폼 -->
-            <div id="quick-payment" class="payment-method-form" style="display: none;">
-                <label for="quick-id">Quick Payment ID:</label>
+            <!-- 카카오페이 폼 -->
+            <div id="KAKAO_PAY-payment" class="payment-method-form" style="display: none;">
+                <label for="quick-id">Kakao Pay ID:</label>
                 <input type="text" id="quick-id" name="quick-id" required>
             </div>
 
             <!-- 계좌 이체 폼 -->
-            <div id="transfer-payment" class="payment-method-form" style="display: none;">
+            <div id="CASH-payment" class="payment-method-form" style="display: none;">
                 <label for="bank-name">Bank Name:</label>
                 <input type="text" id="bank-name" name="bank-name" required>
 
