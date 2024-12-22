@@ -27,10 +27,11 @@ document.getElementById("signupForm").addEventListener("submit", async (event) =
             const data = await response.json();
             console.log("Signup successful:", data);
 
-
+            alert("signup success");
             window.location.href = "/view/login";
         } else {
             const error = await response.json();
+            alert("signup failed");
             console.error("Signup failed:", error);
         }
     } catch (error) {

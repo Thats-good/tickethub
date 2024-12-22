@@ -31,10 +31,11 @@ document.getElementById("loginForm").addEventListener("submit", async (event) =>
                 console.log("Access token saved:", accessToken);
                 console.log("Refresh token saved:", refreshToken);
             }
-
+            alert("login success");
             window.location.href = "/view/main";
         } else {
             const error = await response.json();
+            alert("login failed");
             console.error("Login failed:", error);
         }
     } catch (error) {
