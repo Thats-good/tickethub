@@ -26,7 +26,7 @@ public class AuthService implements UserService{
     @Transactional
     public long signUp(SignUpRequestDto signUpRequestDto) {
         if(userRepository.existsUserByIdentifierOrEmail(signUpRequestDto.getId(), signUpRequestDto.getEmail())) {
-            throw new RuntimeException("이미 가입되어 있는 스튜디오입니다.");
+            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
 
         User user = User.from(signUpRequestDto);

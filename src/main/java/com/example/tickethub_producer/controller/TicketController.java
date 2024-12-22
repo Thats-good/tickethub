@@ -5,6 +5,7 @@ import com.example.tickethub_producer.dto.request.ticket.CheckTokenRequestDto;
 import com.example.tickethub_producer.dto.request.ticket.CreateTicketRequestDto;
 import com.example.tickethub_producer.dto.request.ticket.CheckUserTicketRequestDto;
 import com.example.tickethub_producer.dto.response.ResponseDto;
+import com.example.tickethub_producer.entity.PerformanceTicket;
 import com.example.tickethub_producer.entity.Ticket;
 import com.example.tickethub_producer.service.ProxyService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class TicketController {
     @PostMapping("/create")
     ResponseEntity<ResponseDto> createTicket(@RequestBody CreateTicketRequestDto createTicketRequestDto) {
 
-        proxyService.createTicket(createTicketRequestDto.getUserId(), createTicketRequestDto.getPerformanceId(), LocalDateTime.now(), createTicketRequestDto.getSeatNumber(), createTicketRequestDto.getPayment(), createTicketRequestDto.getJwtToken());
+        proxyService.createTicket(createTicketRequestDto.getPerformanceId(), LocalDateTime.now(), createTicketRequestDto.getSeatNumber(), createTicketRequestDto.getPayment(), createTicketRequestDto.getJwtToken());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -44,7 +45,7 @@ public class TicketController {
     ResponseEntity<ResponseDto> checkUserTicket(@RequestBody CheckUserTicketRequestDto checkUserTicketRequestDto) {
 
 //        proxyService.createUserTicket(createUserTicketRequestDto.getUserId(), createUserTicketRequestDto.getJwtToken());
-        List<Ticket> tickets = proxyService.checkUserTicket(checkUserTicketRequestDto.getUserId(), checkUserTicketRequestDto.getJwtToken());
+        List<PerformanceTicket> tickets = proxyService.checkUserTicket(checkUserTicketRequestDto.getJwtToken());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(STATUS_201, "UserTicket created success.", tickets));

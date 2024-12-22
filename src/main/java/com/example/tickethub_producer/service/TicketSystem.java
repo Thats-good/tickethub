@@ -1,18 +1,17 @@
 package com.example.tickethub_producer.service;
 
 import com.example.tickethub_producer.dto.ProduceTicketResponse;
+import com.example.tickethub_producer.entity.PerformanceTicket;
 import com.example.tickethub_producer.entity.Ticket;
 import com.example.tickethub_producer.entity.User;
-import com.example.tickethub_producer.repository.TicketRepository;
+import com.example.tickethub_producer.repository.PerformanceTicketRepository;
 import com.example.tickethub_producer.repository.UserRepository;
 import com.example.tickethub_producer.utils.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,75 +19,51 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 
 @Service
 @RequiredArgsConstructor
 public class TicketSystem implements ProxyService {
 
-    //private final TicketService ticketService;
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
-    private final TicketRepository ticketRepository;
-
-    private final KafkaProducer<String, String> kafkaProducer;
+    private final PerformanceTicketRepository ticketRepository;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Value("${kafka.createTicketMessageTopic}")
     private String createTicketMessageTopic;
 
-    @PostConstruct
-    public void init() {
-        kafkaProducer.initTransactions();  // 서비스 초기화 시에 한 번만 호출
-    }
-
     @Override
-    @Transactional
-    public ProduceTicketResponse createTicket(long userId, long performanceId, LocalDateTime time, int seatNumber, String payment, String token) {
-        String userIdString = Long.toString(userId);
+    @Transactional(transactionManager = "kafkaTransactionManager")
+    public ProduceTicketResponse createTicket(long performanceId, LocalDateTime time, int seatNumber, String payment, String token) {
+        String userIdString = Long.toString(jwtProvider.getId(token));
         String performanceIdString = Long.toString(performanceId);
         String timeString = time.toString();
+
         String seatNumberString = Integer.toString(seatNumber);
 
-        try{
-            kafkaProducer.beginTransaction();
-            ProducerRecord<String, String> producerRecord = transformMessageStringToJson(userIdString, performanceIdString, timeString, seatNumberString, payment);
-            Future<RecordMetadata> sendFuture = kafkaProducer.send(producerRecord);
+        try {
+            kafkaTemplate.executeInTransaction(operations -> {
+                ProducerRecord<String, String> producerRecord = transformMessageStringToJson(
+                        userIdString, performanceIdString, timeString, seatNumberString, payment);
+                operations.send(producerRecord);
+                return null; // 트랜잭션 성공 시 반환값 없음
+            });
 
-            // 메시지 전송 완료 까지 대기 (Timeout 1sec)
-            RecordMetadata metadata = sendFuture.get(1, TimeUnit.SECONDS);
-            // 트랜잭션 커밋
-            kafkaProducer.commitTransaction();
-            System.out.println("Message sent to topic " + metadata.topic() + " with offset " + metadata.offset());
             return new ProduceTicketResponse("티켓 발급 요청이 정상적으로 처리되었습니다.");
-        }catch (TimeoutException e) {
-            kafkaProducer.abortTransaction();
-            System.out.println("Timeout while waiting for message send to complete");
-            throw new RuntimeException("TimeoutException occurred during message production", e);
-        } catch (ExecutionException e) {
-            kafkaProducer.abortTransaction();
-            System.out.println("Execution exception while sending message");
-            throw new RuntimeException("ExecutionException occurred during message production", e);
-        } catch (InterruptedException e) {
-            kafkaProducer.abortTransaction();
-            System.out.println("Interrupted while waiting for message send to complete");
-            Thread.currentThread().interrupt();  // Restore interrupted status
-            throw new RuntimeException("InterruptedException occurred during message production", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Kafka 트랜잭션 중 오류가 발생했습니다.", e);
         }
     }
 
     @Override
-    public List<Ticket> checkUserTicket(long userId, String token) {
-        User user = userRepository.findById(userId).get();
+    public List<PerformanceTicket> checkUserTicket(String token) {
+        User user = userRepository.findById(jwtProvider.getId(token)).get();
         return ticketRepository.findAllByUser(user);
     }
 
     @Override
     public String checkTicket(long ticketId, String token) {
-        Ticket ticket = ticketRepository.findById(ticketId).get();
+        PerformanceTicket ticket = ticketRepository.findById(ticketId).get();
         String ticketToken = jwtProvider.createTicketToken(ticket);
         ticket.setToken(ticketToken);
         ticketRepository.save(ticket);

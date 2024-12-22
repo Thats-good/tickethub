@@ -5,6 +5,7 @@ import com.example.tickethub_producer.dto.request.user.SignUpRequestDto;
 import com.example.tickethub_producer.dto.response.ResponseDto;
 import com.example.tickethub_producer.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +34,4 @@ public class UserController {
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDto(STATUS_201, "sign-up success.", null));
     }
-
 }

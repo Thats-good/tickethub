@@ -39,7 +39,7 @@ public class JwtProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(ticketTokenExpiredAt)
-                .claim("performance", ticket.getPerformance().getName())
+                .claim("ticketId", ticket.getTicketId())
                 .signWith(SignatureAlgorithm.HS256, JWT_SECRET_KEY)
                 .compact();
         return ticketToken;
@@ -110,5 +110,4 @@ public class JwtProvider {
                 .getBody()
                 .get("userId", Long.class);
     }
-
 }

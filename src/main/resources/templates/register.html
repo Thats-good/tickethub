@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="/fragments/header.html::header"></div>
+</head>
+<body>
+
+<div th:replace="/fragments/nav.html::nav"></div>
+
+<div class="container">
+    <h2>Stacked form</h2>
+    <form id="signupForm">
+        <div class="form-group">
+            <label for="id">Id:</label>
+            <input type="text" class="form-control" id="id" placeholder="Enter id" name="username">
+        </div>
+        <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+        </div>
+        <div class="form-group">
+            <label for="name">name:</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+        </div>
+        <div class="form-group">
+            <label for="email">name:</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <p id="message"></p>
+</div>
+
+<script th:src="@{/js/register.js}" defer></script>
+<footer th:replace="/fragments/footer.html::footer"></footer>
+
+
+</body>
+</html>

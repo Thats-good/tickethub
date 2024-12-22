@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CreateTicketRequestDto {
-    private long userId;
     private long performanceId;
     private int seatNumber;
     private String payment;
